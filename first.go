@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+"fmt"
+"github.com/yangkeusa/test/palindrome"
+)
 
 func fib(x int) int {
         y := 1
@@ -19,4 +22,11 @@ func main() {
                 x := fib(i)
                 fmt.Printf("Fib(%d) = %d\n", i, x)
         }
+	s := "今天aha天今"
+	b := palindrome.IsPalinDrome(s)
+	fmt.Printf("Palin (%s) = %b\n", s, b)
+
+	s2 := "aanb"
+	b2 := palindrome.IsPalinDrome(s2)
+        fmt.Printf("Palin (%s) = %b\n", s2, b2)
 }

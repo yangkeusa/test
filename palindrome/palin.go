@@ -10,14 +10,10 @@ func IsPalinDrome(x string) bool {
 		buffer[j] = rune
 		j++
 	}
-	a := 0
-	z := j - 1
-	for ; a < z; {
+	for a, z := 0, j-1 ; a < z; a, z = a+1, z-1 {
 		if buffer[a] != buffer[z] {
 			return false
 		}
-		a++
-		z--
 	}
 	return true
 }
