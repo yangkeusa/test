@@ -19,6 +19,10 @@ func fib(x int) int {
         return z
 }
 
+func init() {
+	fmt.Print("INITIALIZING....\n")
+}
+
 func main() {
         fmt.Printf("test test \n")
         for i := 0; i < 10; i++ {
@@ -38,4 +42,13 @@ func main() {
 	exp.C(logger, 10)
 	fmt.Print(&buf)
 
+
+	const (
+		_ = iota
+		KB int = 1 << (10 * iota)
+		MB
+		GB
+	)
+	
+	fmt.Printf("KB = %v, MB = %v, GB = %v\n", KB, MB, GB)
 }
