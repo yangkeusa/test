@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"fmt"
 	"log"
-"github.com/yangkeusa/test/palindrome"
-"github.com/yangkeusa/test/exp"
+	"time"
+	"github.com/yangkeusa/test/palindrome"
+	"github.com/yangkeusa/test/exp"
+	"github.com/yangkeusa/test/math"
 )
 
 func fib(x int) int {
@@ -21,6 +23,32 @@ func fib(x int) int {
 
 func init() {
 	fmt.Print("INITIALIZING....\n")
+}
+
+func MatMulBench(iter, m, k, n int) {
+	a := math.NewMatrix(m, k)
+	b := math.NewMatrix(k, n)
+	for i := 0; i < m; i++ {
+                for j := 0; j < k; j++ {
+                        a.Set(i, j, float32(i + j))
+                }
+        }
+        for i := 0; i < k; i++ {
+                for j := 0; j < k; j++ {
+                        b.Set(i, j, float32(i + j))
+                }
+        }
+	begin := time.Now()
+	for i := 0; i < iter; i++ {
+		c, _ := math.Mult(*a, *b)
+		_ = c
+	}
+	end := time.Now()
+	dur := end.Sub(begin)
+
+	num_ops := iter * m * k * n * 2
+	tflops := float64(num_ops) / float64(dur.Nanoseconds())
+	fmt.Printf("Took %v to finish %v operations = %v TFLOPS\n", dur, num_ops, tflops)
 }
 
 func main() {
@@ -51,4 +79,6 @@ func main() {
 	)
 	
 	fmt.Printf("KB = %v, MB = %v, GB = %v\n", KB, MB, GB)
+
+	MatMulBench(10, 128, 256, 512)
 }
