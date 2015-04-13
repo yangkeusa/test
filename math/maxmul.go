@@ -5,6 +5,7 @@ package math
 import ( 
 	"fmt"
 	"errors"
+	"sync"
 )
 
 type Matrix struct {
@@ -59,5 +60,37 @@ func Mult(a, b Matrix) (c *Matrix, err error) {
 			c.Set(i, j, x)
 		}
 	}
+	return c, nil
+}
+
+
+// A faster version using go routines
+func FastMul(a, b Matrix) (c *Matrix, err error) {
+        c = new(Matrix)
+        // a is M x K                                                                                                                              
+        // b is K x N
+        // c should be M x N                                                                                                                          
+        m, k, n := a.rows, a.cols, b.cols
+        if k != b.rows {
+                // dimension mismatch 
+                return c, errors.New("Dimension mismatch")
+        }
+        c = NewMatrix(m, n)
+	var g sync.WaitGroup
+        for i := 0; i < m; i++ {
+                for j := 0; j < n; j++ {
+			g.Add(1)
+			// Use  go routine to run this in a thread
+			go func(i, j int) {
+				defer g.Done()
+				var x float32 = 0
+				for v := 0; v < k; v++ {
+					x += a.Get(i, v) * b.Get(v, j)
+				}
+				c.Set(i, j, x)
+			}(i, j)
+		}
+	}
+	g.Wait()
 	return c, nil
 }
