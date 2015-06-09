@@ -8,6 +8,9 @@ import (
 	"sync"
 )
 
+// #include <Eigen/eigen_c.h>
+import "C"
+
 type Matrix struct {
 	rows int
 	cols int
@@ -81,7 +84,7 @@ func FastMul(a, b Matrix) (c *Matrix, err error) {
                 for j := 0; j < n; j++ {
 			g.Add(1)
 			// Use  go routine to run this in a thread
-			go func(i, j int) {
+				go func(i, j int) {
 				defer g.Done()
 				var x float32 = 0
 				for v := 0; v < k; v++ {
@@ -94,3 +97,21 @@ func FastMul(a, b Matrix) (c *Matrix, err error) {
 	g.Wait()
 	return c, nil
 }
+
+// Eigen Multiplication
+func EigenMult(a, b Matrix) (c *Matrix,err error) {
+        c = new(Matrix)
+	// a is M x K
+        // b is K x N
+        // c should be M x N
+        m, k, n := a.rows, a.cols, b.cols
+        if k != b.rows {
+		// dimension mismatch
+                return c, errors.New("Dimension mismatch")
+	}
+        c = NewMatrix(m, n)
+	// Now call the C thing
+	C.MatMul(&a.data[0], &b.data[0], m, k, n, &c.data[0])
+	return c, nil
+}
+
