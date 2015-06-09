@@ -1,5 +1,7 @@
 // Ke's library for matrix mulitiplication
 
+// THIS IS ADDED IN THE TEST
+
 package math
 
 import ( 
