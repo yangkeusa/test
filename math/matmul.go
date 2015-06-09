@@ -1,6 +1,6 @@
 // Ke's library for matrix mulitiplication
 
-// THIS IS THE MASTER BRANCH
+// THIS IS THE MERGED STUFF
 
 package math
 
