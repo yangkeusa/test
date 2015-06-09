@@ -1,5 +1,7 @@
 // Ke's library for matrix mulitiplication
 
+// THIS IS THE MASTER BRANCH
+
 package math
 
 import ( 
